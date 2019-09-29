@@ -1,10 +1,9 @@
 package toolskit;
 
-import com.sun.org.apache.bcel.internal.generic.FieldGenOrMethodGen;
 import org.apache.commons.io.IOCase;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFCell;
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.DateUtil;
 
@@ -137,6 +136,7 @@ public class ExcelOperating {
                 break;
             case BOOLEAN: //Boolean
                 cellValue = String.valueOf(cell.getBooleanCellValue());
+
                 break;
             case FORMULA: //公式
                 cellValue = String.valueOf(cell.getCellFormula());

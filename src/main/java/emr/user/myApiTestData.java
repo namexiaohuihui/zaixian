@@ -1,5 +1,6 @@
 package emr.user;
 
+import org.testng.ITestContext;
 import org.testng.annotations.DataProvider;
 import toolskit.ReadExcel;
 
@@ -11,11 +12,14 @@ import java.util.Map;
 public class myApiTestData {
 
 
-    @DataProvider(name = "user")
-    public Object[][] getLoginData(Method method) {
+    @DataProvider
+    public Object[][] getLoginData(ITestContext context) {
+        String[] groups = context.getIncludedGroups();
         System.out.println("@DataProvider(name='loginProvider')");
-        System.out.println("dataProvider"+method.getName());
-
+        System.out.println("dataProvider"+context.getName());
+        for(String group : groups){
+            System.out.println("dataProvider"+group);
+        }
         String load = "C:\\Users\\LGYY-USER\\Desktop\\红包发放.xlsx";
         String sheetName = "登录";
         ReadExcel re = new ReadExcel();

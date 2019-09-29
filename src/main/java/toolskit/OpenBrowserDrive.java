@@ -1,59 +1,32 @@
 package toolskit;
 
+import org.apache.commons.exec.util.StringUtils;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.util.concurrent.TimeUnit;
+import toolskit.carrier.*;
 
 public class OpenBrowserDrive {
 
-    private WebDriver driver;
-
-    private String loadRoute = "F:\\drivers\\";
-
-
-    public WebDriver getWebDrivaer() {
-        if (driver == null) {
-            System.out.println("调用时提示：浏览器对象为空");
+    public BrowserDriver getBrowserDriver(String browserType){
+        if(browserType == null){
+            return null;
         }
-        return driver;
-    }
-
-    public void setProperty() {
-        System.setProperty("webdriver.chrome.driver", loadRoute + "chromedriver.exe");
-    }
-
-    //   获取对象：谷歌
-    public WebDriver openChrome() {
-        if (driver == null) {
-            setProperty();
-            driver = new ChromeDriver();
-
+        BrowserDriver driver = null;
+        if(browserType.equalsIgnoreCase("chrome")){
+            driver = new ChromeBrowser();
+        } else if(browserType.equalsIgnoreCase("firefox")){
+            driver = new FireFoxBrowser();
+        } else if(browserType.equalsIgnoreCase("ie")){
+            driver = new WinIEBrowser();
+        }else if(browserType.equalsIgnoreCase("edge")){
+            driver = new WinEdgeBrowser();
         }
-        return driver;
-    }
 
-    public WebDriver openBrowser() {
-        //        创建浏览器对象
-        driver = openChrome();
-        //        是浏览器的大小
-        driver.manage().window().maximize();
-        //        设置测试的网页
-        String openUrl = "**";
-
-        driver.get(openUrl);
-
-        //        设置网页超时的时间
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-
-        String title = driver.getTitle();
+        if (driver !=null){
+            driver.runCarrier();
+        }
 
         return driver;
-    }
-
-    public void closeBrowser(int sleepNumber) throws InterruptedException {
-        Thread.sleep(sleepNumber);
-        driver.close();
     }
 
 }

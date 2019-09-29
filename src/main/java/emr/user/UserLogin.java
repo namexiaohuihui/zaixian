@@ -1,22 +1,18 @@
 package emr.user;
 
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
 import toolskit.OpenBrowserDrive;
-import toolskit.ReadExcel;
+import org.testng.Assert;
+import toolskit.incomprehension.AbnormalCodeError;
+import toolskit.incomprehension.CustomError;
+import toolskit.incomprehension.ResourceNotFoundException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
+
 import java.util.Map;
 
 public class UserLogin {
@@ -38,8 +34,8 @@ public class UserLogin {
 
     @BeforeMethod
     public void runDriveBrowser() throws InterruptedException {
-        openDrive = new OpenBrowserDrive();
-        driver = openDrive.openBrowser();
+//        openDrive = new OpenBrowserDrive();
+//        driver = openDrive.openBrowser();
     }
 
     @AfterMethod
@@ -49,11 +45,11 @@ public class UserLogin {
 //        利用js代码在指定的元素上失去焦点
 //        driver_js.executeScript("location.reload()");
 
-        openDrive.closeBrowser(3000);
+//        openDrive.closeBrowser(3000);
     }
 
     public By getByAttribute(String elePath, String pathType) {
-        By eleBy = null;
+        By eleBy ;
         switch (pathType) {
             case "id":
                 eleBy = By.id(elePath);
@@ -69,7 +65,6 @@ public class UserLogin {
                 break;
             default:
                 eleBy = null;
-
         }
         return eleBy;
     }
@@ -169,27 +164,56 @@ public class UserLogin {
 
     }
 
-    public void clickLogin() {
-        driver.findElement(By.cssSelector("form > button:nth-child(4)")).click();
+    public void clickLogin() throws InvocationTargetException, IllegalAccessException {
+        // 找到错误提示语位置
+        Method getPassErrorMsg = loginElement.getLoginPageElement("getLoginButton");
 
-        WebElement userError = new WebDriverWait(driver, 5)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("body > div.el-message.el-message--error")));
+        Map loginMap = (Map) getPassErrorMsg.invoke(loginElement);
 
-        String errorText = userError.getText();
-        System.out.println("page pupop error info: " + errorText);
+        String elePath = (String) loginMap.get("elePath");
+        String pathType = (String) loginMap.get("pathType");
+        WebElement userError = getVisibilityStatus(elePath, pathType);
+        if (userError != null) {
+            userError.click();
+        } else {
+
+            Assert.assertThrows(NullPointerException.class,
+                    ()->{throw new AbnormalCodeError("excel中出现不符合要求的资源:");}); //failed
+
+        }
+
     }
 
 
-    @Test(description = "用户的登录", dataProvider = "user", dataProviderClass = myApiTestData.class)
+    /**
+     * https://howtodoinjava.com/testng/testng-difference-between-factory-and-dataprovider/
+     * dataProvider可以是定义的name名字也可以是函数名
+     * @param param
+     */
+    @Test(description = "用户的登录", dataProvider = "getLoginData", dataProviderClass = myApiTestData.class,groups={"function-test","unit-test"})
     public void mainTest(Map<?, ?> param) {
+        // 输入内容
+//        inputUserInfo("getLoginUser", (String) param.get("username"));
+//        inputUserInfo("getLoginPass", (String) param.get("password"));
 
-        inputUserInfo("getLoginUser", (String) param.get("username"));
-        getUserErrorInfo("getLoginUserError", "getUserErrorMsg");
+        // 点击登录按钮
+//        clickLogin();
 
-        inputUserInfo("getLoginPass", (String) param.get("password"));
-        getUserErrorInfo("getLoginPassError", "getPassErrorMsg");
-
-        clickLogin();
+        // 判断错误是否出现
+        String errorType = (String)param.get("type");
+        if ("info".equals(errorType)){
+//            getUserErrorInfo("getLoginUserError", "getUserErrorMsg");
+//            getUserErrorInfo("getLoginPassError", "getPassErrorMsg");
+        }else if("page".equals(errorType)){
+//            WebElement userError = new WebDriverWait(driver, 5)
+//                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("body > div.el-message.el-message--error")));
+//
+//            String errorText = userError.getText();
+//            System.out.println("page pupop error info: " + errorText);
+        }else {
+            //failed
+            Assert.assertThrows(NullPointerException.class,()->{throw new ResourceNotFoundException();});
+        }
 
     }
 
