@@ -27,10 +27,8 @@ public class BrowserDriver implements CarrierDriver  {
 
         //      浏览器的大小
         driver.manage().window().maximize();
-        //      设置测试的网页
-        String openUrl = "http://10.35.112.209:8080/login";
 
-        driver.get(openUrl);
+        driver.get(url);
 
         //      设置网页超时的时间
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);

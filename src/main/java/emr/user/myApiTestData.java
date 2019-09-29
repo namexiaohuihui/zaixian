@@ -20,7 +20,7 @@ public class myApiTestData {
         for(String group : groups){
             System.out.println("dataProvider"+group);
         }
-        String load = "C:\\Users\\LGYY-USER\\Desktop\\红包发放.xlsx";
+        String load = ".\\drivers\\红包发放.xlsx";
         String sheetName = "登录";
         ReadExcel re = new ReadExcel();
 
