@@ -25,13 +25,14 @@ public class BrowserDriver implements CarrierDriver  {
     @Override
     public void openCarrier(String url){
 
-        //      浏览器的大小
+        // 浏览器的大小
         driver.manage().window().maximize();
 
+        // 打开网址
         driver.get(url);
 
-        //      设置网页超时的时间
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        // 设置网页超时的时间
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     /**

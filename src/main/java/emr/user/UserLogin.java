@@ -1,19 +1,24 @@
 package emr.user;
 
+import org.testng.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
-import toolskit.OpenBrowserDrive;
-import org.testng.Assert;
-import toolskit.incomprehension.AbnormalCodeError;
-import toolskit.incomprehension.CustomError;
-import toolskit.incomprehension.ResourceNotFoundException;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import java.util.Map;
+
+import toolskit.OpenBrowserDrive;
+import toolskit.carrier.BrowserDriver;
+import toolskit.carrier.ChromeBrowser;
+import toolskit.exhibition.ExecuteFramework;
+import toolskit.exhibition.InterfaceShow;
+import toolskit.incomprehension.AbnormalCodeError;
+import toolskit.incomprehension.ResourceNotFoundException;
+
+
+
 
 public class UserLogin {
 
@@ -21,76 +26,40 @@ public class UserLogin {
 
     private final long TIME_OUT_SECONDS = 3;
     private WebDriver driver;
-    private OpenBrowserDrive openDrive;
     private LoginElement loginElement;
-    private myApiTestData testData;
+    private LoginExcelData loginData;
+    private BrowserDriver browser;
+    private InterfaceShow execute;
 
     @BeforeSuite
     public void getDriveBrowser(){
 
         loginElement = new LoginElement();
-        testData = new myApiTestData();
+        loginData = new LoginExcelData();
+
     }
 
     @BeforeMethod
     public void runDriveBrowser() throws InterruptedException {
-//        openDrive = new OpenBrowserDrive();
-//        driver = openDrive.openBrowser();
+        browser = new ChromeBrowser();
+        driver = browser.runCarrier("***");
+        execute = new ExecuteFramework(driver);
     }
 
     @AfterMethod
     public void closeDrive() throws InterruptedException {
-
-//        JavascriptExecutor driver_js = ((JavascriptExecutor) driver);
+        JavascriptExecutor driver_js = ((JavascriptExecutor) driver);
 //        利用js代码在指定的元素上失去焦点
-//        driver_js.executeScript("location.reload()");
+        driver_js.executeScript("location.reload()");
 
-//        openDrive.closeBrowser(3000);
+        browser.closeBrowser(3000);
     }
 
-    public By getByAttribute(String elePath, String pathType) {
-        By eleBy ;
-        switch (pathType) {
-            case "id":
-                eleBy = By.id(elePath);
-                break;
-            case "xpath":
-                eleBy = By.xpath(elePath);
-                break;
-            case "css":
-                eleBy = By.cssSelector(elePath);
-                break;
-            case "name":
-                eleBy = By.name(elePath);
-                break;
-            default:
-                eleBy = null;
-        }
-        return eleBy;
-    }
 
-    public WebElement getVisibilityStatus(String elePath, String pathType) {
-        By s = getByAttribute(elePath, pathType);
-        WebElement username = null;
-        try {
-            username = new WebDriverWait(driver, TIME_OUT_SECONDS)
-                    .until(ExpectedConditions.visibilityOfElementLocated(s));
-        } catch (TimeoutException a) {
-            a.printStackTrace();
-        }
 
-        return username;
-    }
 
     public String getElement(String elePath, String pathType) {
-        String errorText;
-        WebElement userError = getVisibilityStatus(elePath, pathType);
-        if (userError != null) {
-            errorText = userError.getText();
-        } else {
-            errorText = null;
-        }
-
+        String errorText = execute.getAttributeTextValue(elePath, pathType,null,"text");
         return errorText;
     }
 
@@ -105,18 +74,14 @@ public class UserLogin {
 
             System.out.println("the element: " + loginMap.get("elePath") + " input data " + loginMap.get("pathType"));
 
-            WebElement username = getVisibilityStatus(elePath, pathType);
-            username.click();
-            username.clear();
-            username.sendKeys(userData);
+            WebElement username = execute.VisibleFocus(elePath, pathType);
+            execute.HandleVisibleInput("","",username,userData);
 
-            JavascriptExecutor driver_js = ((JavascriptExecutor) driver);
             // 利用js代码在指定的元素上失去焦点
+            JavascriptExecutor driver_js = ((JavascriptExecutor) driver);
             driver_js.executeScript("arguments[0].blur();", username);
 
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
@@ -164,22 +129,28 @@ public class UserLogin {
 
     }
 
-    public void clickLogin() throws InvocationTargetException, IllegalAccessException {
+    public void clickLogin() {
         // 找到错误提示语位置
         Method getPassErrorMsg = loginElement.getLoginPageElement("getLoginButton");
 
-        Map loginMap = (Map) getPassErrorMsg.invoke(loginElement);
+        Map loginMap = null;
+        try {
+            loginMap = (Map) getPassErrorMsg.invoke(loginElement);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
 
         String elePath = (String) loginMap.get("elePath");
         String pathType = (String) loginMap.get("pathType");
-        WebElement userError = getVisibilityStatus(elePath, pathType);
+
+        WebElement userError = execute.VisibleFocus(elePath, pathType);
         if (userError != null) {
             userError.click();
         } else {
-
             Assert.assertThrows(NullPointerException.class,
                     ()->{throw new AbnormalCodeError("excel中出现不符合要求的资源:");}); //failed
-
         }
 
     }
@@ -190,26 +161,26 @@ public class UserLogin {
      * dataProvider可以是定义的name名字也可以是函数名
      * @param param
      */
-    @Test(description = "用户的登录", dataProvider = "getLoginData", dataProviderClass = myApiTestData.class,groups={"function-test","unit-test"})
+    @Test(description = "用户的登录", dataProvider = "getLoginData", dataProviderClass = LoginExcelData.class,groups={"function-test","unit-test"})
     public void mainTest(Map<?, ?> param) {
         // 输入内容
-//        inputUserInfo("getLoginUser", (String) param.get("username"));
-//        inputUserInfo("getLoginPass", (String) param.get("password"));
+        inputUserInfo("getLoginUser", (String) param.get("username"));
+        inputUserInfo("getLoginPass", (String) param.get("password"));
 
         // 点击登录按钮
-//        clickLogin();
+        clickLogin();
 
         // 判断错误是否出现
         String errorType = (String)param.get("type");
         if ("info".equals(errorType)){
-//            getUserErrorInfo("getLoginUserError", "getUserErrorMsg");
-//            getUserErrorInfo("getLoginPassError", "getPassErrorMsg");
+            getUserErrorInfo("getLoginUserError", "getUserErrorMsg");
+            getUserErrorInfo("getLoginPassError", "getPassErrorMsg");
         }else if("page".equals(errorType)){
-//            WebElement userError = new WebDriverWait(driver, 5)
-//                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("body > div.el-message.el-message--error")));
-//
-//            String errorText = userError.getText();
-//            System.out.println("page pupop error info: " + errorText);
+            WebElement userError = new WebDriverWait(driver, 5)
+                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("body > div.el-message.el-message--error")));
+
+            String errorText = userError.getText();
+            System.out.println("page pupop error info: " + errorText);
         }else {
             //failed
             Assert.assertThrows(NullPointerException.class,()->{throw new ResourceNotFoundException();});

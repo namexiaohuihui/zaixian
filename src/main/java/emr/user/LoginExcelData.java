@@ -4,12 +4,11 @@ import org.testng.ITestContext;
 import org.testng.annotations.DataProvider;
 import toolskit.ReadExcel;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
+
 import java.util.List;
 import java.util.Map;
 
-public class myApiTestData {
+public class LoginExcelData {
 
 
     @DataProvider
@@ -20,7 +19,7 @@ public class myApiTestData {
         for(String group : groups){
             System.out.println("dataProvider"+group);
         }
-        String load = ".\\drivers\\红包发放.xlsx";
+        String load = ".\\drivers\\测试用例.xlsx";
         String sheetName = "登录";
         ReadExcel re = new ReadExcel();
 

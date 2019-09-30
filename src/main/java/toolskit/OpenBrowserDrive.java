@@ -7,10 +7,13 @@ import toolskit.carrier.*;
 
 public class OpenBrowserDrive {
 
-    public BrowserDriver getBrowserDriver(String browserType){
-        if(browserType == null){
+    public BrowserDriver getBrowserDriver(String browserType,String webUrl){
+
+        // 传入的元素是否存在
+        if(browserType == null || browserType.equalsIgnoreCase("")){
             return null;
         }
+
         BrowserDriver driver = null;
         if(browserType.equalsIgnoreCase("chrome")){
             driver = new ChromeBrowser();
@@ -23,7 +26,7 @@ public class OpenBrowserDrive {
         }
 
         if (driver !=null){
-            driver.runCarrier();
+            driver.runCarrier(webUrl);
         }
 
         return driver;
