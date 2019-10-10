@@ -12,6 +12,9 @@ public class BrowserDriver implements CarrierDriver  {
     protected String loadRoute = ".\\drivers\\";
 
 
+    public WebDriver getDriver(){
+        return driver;
+    }
     @Override
     public void setProperty() {
 

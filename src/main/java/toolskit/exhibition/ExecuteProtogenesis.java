@@ -1,8 +1,10 @@
 package toolskit.exhibition;
 
+import java.util.List;
+
 import org.openqa.selenium.*;
 
-import java.util.List;
+
 
 
 /**
@@ -20,7 +22,7 @@ public class ExecuteProtogenesis implements InterfaceShow {
      * 通过js来查找元素
      * @param elePath 元素路径
      * @param eleType 路径类型;目前没用到。
-     * @return
+     * @return 单个元素对象
      */
     @Override
     public WebElement VisibleFocus(String elePath, String eleType) {
@@ -28,6 +30,12 @@ public class ExecuteProtogenesis implements InterfaceShow {
 
     }
 
+    /**
+     *
+     * @param elePath 元素路径
+     * @param eleType 路径类型
+     * @return 返回路径下的全部元素
+     */
     @Override
     public List<WebElement> VisibleFocusGruop(String elePath, String eleType) {
         return null;
@@ -37,7 +45,7 @@ public class ExecuteProtogenesis implements InterfaceShow {
      * 通过js来判断元素是否隐藏;该函数有坑不建议用
      * @param elePath 元素路径
      * @param eleType 路径类型;目前尚未使用
-     * @return
+     * @return 布尔值
      */
     @Override
     public boolean HideFocus(String elePath, String eleType) {
@@ -86,6 +94,9 @@ public class ExecuteProtogenesis implements InterfaceShow {
     @Override
     public String getAttributeTextValue(String elePath, String eleType, WebElement pageTab,String valueType) {
         String text = (String) driver_js.executeScript("return arguments[0].value", pageTab);
+        if (text==null){
+            text = "";
+        }
         return text;
     }
 

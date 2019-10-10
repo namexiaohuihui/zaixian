@@ -1,5 +1,8 @@
 package toolskit;
 
+import java.io.*;
+import java.util.List;
+
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Cell;
@@ -9,8 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.*;
-import java.util.List;
+
 
 public class WriteExcel extends ExcelOperating{
 
@@ -41,7 +43,7 @@ public class WriteExcel extends ExcelOperating{
      */
     public static void main(String[] args){
         WriteExcel crt = new WriteExcel();
-        int i = new ReadExcel().singleXlsx(crt.excelPath, 0);
+        int i = new ReadExcel().singleXlsx(crt.excelPath, "sheet");
         crt.insertStartPointer = i + 1;
         crt.insertRows();
     }
@@ -134,9 +136,9 @@ public class WriteExcel extends ExcelOperating{
      * @param list         传入要写的内容，此处以一个List内容为例，先把要写的内容放到一个list中
      * @param outputStream 把输出流怼到要写入的Excel上，准备往里面写数据
      */
-    public static void writeExcel(List<List> list, OutputStream outputStream) {
+    public void writeExcel(List<List> list, OutputStream outputStream) {
         //创建工作簿
-        XSSFWorkbook xssfWorkbook = null;
+        XSSFWorkbook xssfWorkbook;
         xssfWorkbook = new XSSFWorkbook();
 
         //创建工作表

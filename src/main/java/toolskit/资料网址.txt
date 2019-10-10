@@ -1,0 +1,37 @@
+JDK10、JDK11、JDK12新特性：
+https://www.cnblogs.com/weiyinfu/p/10941334.html
+
+浏览器驱动配置:
+https://www.jianshu.com/p/305ea89b87e9
+
+JUnit 4 Vs TestNG比较：
+https://www.jianshu.com/p/d1e4d4aa9aa5
+
+DataProvider的使用:
+https://www.jianshu.com/p/8e333a0ec42a
+
+DataProvider的官网:
+https://howtodoinjava.com/testng/testng-difference-between-factory-and-dataprovider/
+
+testng官网：
+https://testng.org/doc/
+
+poi:
+http://poi.apache.org/components/spreadsheet/quick-guide.html
+https://www.oschina.net/p/Easy-POI
+
+【TestNG】TestNG使用教程详解
+https://blog.csdn.net/df0128/article/details/83243822
+
+java + selenium + testng实现简单的UI自动化：inject+uncommons+testng+plugins 需要这四个maven
+https://cloud.tencent.com/developer/article/1199216
+
+testng中使用reportng报告:
+https://www.cnblogs.com/kusy/p/8874059.html
+
+美化报告
+https://www.cnblogs.com/longronglang/p/6875721.html
+
+国内文章:
+http://www.automationtestinghub.com/3-ways-to-start-appium-server-from-java/
+https://www.browserstack.com/app-automate/appium-java

@@ -22,7 +22,7 @@ public interface InterfaceShow {
      * 根据路径获取相关联的全部元素
      * @param elePath 元素路径
      * @param eleType 路径类型
-     * @return
+     * @return 返回路径下的全部元素
      */
     List<WebElement> VisibleFocusGruop(String elePath, String eleType);
 
@@ -67,7 +67,7 @@ public interface InterfaceShow {
      * @param elePath 元素路径
      * @param eleType 路径类型
      * @param pageTab 元素本身
-     * @return
+     * @return 返回元素的text或者指定value值
      */
     String getAttributeTextValue(String elePath,String eleType,WebElement pageTab,String valueType);
 }

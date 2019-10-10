@@ -2,7 +2,7 @@ package toolskit.carrier;
 
 import org.openqa.selenium.WebDriver;
 
-// https://www.jianshu.com/p/305ea89b87e9
+
 interface CarrierDriver {
 
     // 设置载体属性

@@ -1,9 +1,9 @@
 package toolskit;
 
-import org.apache.poi.ss.usermodel.*;
-
 import java.io.*;
 import java.util.*;
+
+import org.apache.poi.ss.usermodel.*;
 
 
 public class ReadExcel extends ExcelOperating {
@@ -41,9 +41,8 @@ public class ReadExcel extends ExcelOperating {
     /**
      * 通过Workbook来读取excle表格上的数据
      *
-     * @param load
-     * @return
-     * @throws IOException
+     * @param load 文件所在路径
+     * @return 获取到的数据
      */
     public List<Map<Integer, Object>> wholeReadXlsx(String load) {
         // excel中第几列 ： 对应的表头
@@ -94,12 +93,10 @@ public class ReadExcel extends ExcelOperating {
      * load文档所在地
      * numSheet当前文档中所读写的工作薄
      * rowNum当前工作薄中的第几个数据
-     *
-     * @param load
-     * @param sheetName
-     * @param rowNum
-     * @return
-     * @throws IOException
+     * @param load 文件所在路径
+     * @param sheetName sheet表格名字
+     * @param rowNum 指定行数
+     * @return 找到的全部数据
      */
     public Map<String, String> singleReadXlsx(String load, String sheetName, int rowNum) {
         Workbook xssfWorkbook = distinguishWorkbook(load);
@@ -134,16 +131,15 @@ public class ReadExcel extends ExcelOperating {
 
 
     /**
-     * 返回表中数据的长度
-     *
-     * @param load
-     * @return
-     * @throws IOException
+     *  指定表格中行的数据长度
+     * @param load 文件名
+     * @param nameSheet 表格名字
+     * @return 表格行的总数
      */
-    public int singleXlsx(String load, int numSheet) {
+    public int singleXlsx(String load, String nameSheet) {
         int row = 0;
         // 获取每一个工作薄
-        Sheet sheetAt = distinguishWorkbook(load).getSheetAt(numSheet);
+        Sheet sheetAt = distinguishWorkbook(load).getSheet(nameSheet);
         if (sheetAt != null) {
             row = sheetAt.getLastRowNum();
         }
@@ -207,15 +203,15 @@ public class ReadExcel extends ExcelOperating {
      * 把一个Map中的所有键和值分别放到一个list中，
      * 再把这两个list整个放到一个大的list里面，即 [ [key1,key2,key3...] , [value1,value2,value3...] ]
      *
-     * @param map
-     * @return
+     * @param map 需要转换的map
+     * @return 已转换后的list
      */
     public static List<List> convertMapToList(Map map) {
         List<List> list = new ArrayList<List>();
         List<String> key_list = new LinkedList<String>();
         List<String> value_list = new LinkedList<String>();
 
-        Set<Map.Entry<String, String>> set = map.entrySet();
+        Set set = map.entrySet();
         Iterator<Map.Entry<String, String>> iter1 = set.iterator();
         while (iter1.hasNext()) {
             key_list.add(iter1.next().getKey());

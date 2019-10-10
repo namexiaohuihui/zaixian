@@ -1,11 +1,18 @@
-package emr.user;
+package medical.handles;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-// https://www.jianshu.com/p/10c29883eac1
-// https://blog.csdn.net/li123128/article/details/80652762
+import org.testng.ITestContext;
+import org.testng.annotations.DataProvider;
+
+import toolskit.ReadExcel;
+
+
+
+
 public class LoginElement {
 
     // 用于存储元素路径及元素类型
@@ -82,4 +89,36 @@ public class LoginElement {
     }
 
 
+    @DataProvider
+    public Object[][] getLoginData(ITestContext context) {
+
+        String load = ".\\drivers\\测试用例.xlsx";
+        String sheetName = "模拟";
+        ReadExcel re = new ReadExcel();
+
+        List<Map<String, String>> maps = re.readExcel(load, sheetName);
+        Object[][] testData = mapsTpArray(maps);
+
+        return testData;
+    }
+
+
+    private Object[][] mapsTpArray(List<Map<String, String>> maps) {
+        int singleListSize = maps.size();
+
+        // 创建一个二维数组
+        Object[][] testData = new Object[singleListSize][];
+
+        for (int singleSize = 0; singleSize < singleListSize; singleSize++) {
+
+            Map<String, String> singleMap = maps.get(singleSize);
+            testData[singleSize] = new Object[]{singleMap};
+
+        }
+
+        // 返回数据传给脚本
+        return testData;
+
+
+    }
 }

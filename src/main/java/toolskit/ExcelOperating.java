@@ -1,5 +1,10 @@
 package toolskit;
 
+import java.io.*;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.apache.commons.io.IOCase;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -7,30 +12,19 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.DateUtil;
 
-import java.io.*;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-// http://poi.apache.org/components/spreadsheet/quick-guide.html
-// https://www.cnblogs.com/yanjie-java/p/8329667.html
-// https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Cell.html
-// https://www.cnblogs.com/ning-blogs/p/6635909.html
 
-// https://blog.csdn.net/jianggujin/article/details/80200400
-// https://www.oschina.net/p/Easy-POI
 
-// https://blog.csdn.net/shuwei003/article/details/6741649
-// https://blog.csdn.net/tang19880721/article/details/38731797
 
 public class ExcelOperating {
+
     private final String XLS_VERSION = "xls";
     private final String XLSX_VERSION = "xlsx";
 
     /**
      * 判断Excel的版本,获取Workbook
      * @param fileName 文件名
-     * @return
+     * @return sheet对象
      */
     public Workbook distinguishWorkbook(String fileName) {
         Workbook workbook = null;
@@ -104,7 +98,6 @@ public class ExcelOperating {
      * 把单元格的内容转为字符串
      * 高版本的import org.apache.poi.ss.usermodel.CellType变为了import org.apache.poi.ss.usermodel.Cell;
      * 同时cellRowName.setCellType(CellType.STRING);变为了cellRowName.setCellType(Cell.CELL_TYPE_STRING);
-     * 原文：https://blog.csdn.net/qq_20200047/article/details/82223898
      * 并且xssfCell.getCellTypeEnum()变成xssfCell.getCellType()
      * CellType	                类型	        值
      * NUMERIC	                数值型	        0
@@ -113,7 +106,6 @@ public class ExcelOperating {
      * BLANK	                空值	        3
      * BOOLEAN	                布尔型	        4
      * ERROR	                错误	        5
-     * 原文:https://blog.csdn.net/nanshaowei/article/details/52815483
      * @param cell 单元格
      * @return 字符串
      */

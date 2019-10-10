@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="startSearch" parallel="tests" thread-count="4">
+    <!--listener 不使用默认产生报告的监听器配置，自己写明一个产生报告的监听器-->
+    <listeners>
+        <listener class-name="org.uncommons.reportng.HTMLReporter"/>
+        <listener class-name="org.uncommons.reportng.JUnitXMLReporter"/>
+    </listeners>
+    <test verbose="2" name="smoke">
+        <!--        <parameter name="dingdong" value="叮咚"/>-->
+
+        <classes>
+            <class name="medical.user.UserLogin">
+                <!--                <methods>-->
+                <!--                    <include name="hanshumingzi" />-->
+                <!--                </methods>-->
+            </class>
+        </classes>
+    </test>
+
+</suite>
